@@ -48,4 +48,5 @@ docker compose run --rm -T harness python live_client.py --interval 200 --durati
 docker compose logs --no-color --no-log-prefix > all.log && python check_logs.py all.log
 ```
 Timers are set with `HEARTBEAT_MS`, `ELECTION_MIN_MS`, `ELECTION_MAX_MS` (defaults 50, 300, 600). Set `PREVOTE=1` for Pre-Vote.
+`live_client.py` sends commands to `POST /client` on your nodes; it expects the answer `{"accepted", "leader"}` (see handout section 5.3).
 Fault injection: see handout section 5.4 (`docker kill`, `docker network disconnect`, `docker pause`, `tc netem`).
