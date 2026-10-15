@@ -1,0 +1,72 @@
+# Five IE-Raft nodes and the test harness.  Nodes listen on port 8000 inside the network.
+x-node: &node
+  build: ${NODE_DIR:-./node}
+  healthcheck:
+    test: ["CMD", "python3", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health', timeout=1)"]
+    interval: 1s
+    timeout: 2s
+    retries: 30
+x-env: &env
+  MODE: ${MODE:-scripted}              # scripted (Part 1-2, Part 3 section 1) or live (Part 3 experiments)
+  PEERS: "0=http://node0:8000,1=http://node1:8000,2=http://node2:8000,3=http://node3:8000,4=http://node4:8000"
+  COMMIT_MODE: ${COMMIT_MODE:-A}
+  PREVOTE: ${PREVOTE:-0}
+  HEARTBEAT_MS: ${HEARTBEAT_MS:-50}
+  ELECTION_MIN_MS: ${ELECTION_MIN_MS:-300}
+  ELECTION_MAX_MS: ${ELECTION_MAX_MS:-600}
+
+services:
+  node0:
+    <<: *node
+    container_name: node0
+    cap_add: [NET_ADMIN]                 # lets you use tc netem in Part 3 (install iproute2 in the Dockerfile)
+    environment:
+      <<: *env
+      NODE_ID: "0"
+    volumes: ["node0-data:/data"]
+  node1:
+    <<: *node
+    container_name: node1
+    cap_add: [NET_ADMIN]                 # lets you use tc netem in Part 3 (install iproute2 in the Dockerfile)
+    environment:
+      <<: *env
+      NODE_ID: "1"
+    volumes: ["node1-data:/data"]
+  node2:
+    <<: *node
+    container_name: node2
+    cap_add: [NET_ADMIN]                 # lets you use tc netem in Part 3 (install iproute2 in the Dockerfile)
+    environment:
+      <<: *env
+      NODE_ID: "2"
+    volumes: ["node2-data:/data"]
+  node3:
+    <<: *node
+    container_name: node3
+    cap_add: [NET_ADMIN]                 # lets you use tc netem in Part 3 (install iproute2 in the Dockerfile)
+    environment:
+      <<: *env
+      NODE_ID: "3"
+    volumes: ["node3-data:/data"]
+  node4:
+    <<: *node
+    container_name: node4
+    cap_add: [NET_ADMIN]                 # lets you use tc netem in Part 3 (install iproute2 in the Dockerfile)
+    environment:
+      <<: *env
+      NODE_ID: "4"
+    volumes: ["node4-data:/data"]
+  harness:
+    build: ./harness
+    profiles: ["tools"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${SCRIPTS_DIR:-./scripts}:/scripts:ro
+
+volumes:
+  node0-data:
+  node1-data:
+  node2-data:
+  node3-data:
+  node4-data:
+

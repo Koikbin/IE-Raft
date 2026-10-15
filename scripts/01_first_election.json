@@ -1,0 +1,161 @@
+{
+ "name": "01 first election",
+ "description": "Worked example of the handout, section 6.1.",
+ "config": {
+  "levels": [
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "views": {},
+  "commit_mode": "A"
+ },
+ "ops": [
+  {
+   "op": "timeout",
+   "node": 0
+  },
+  {
+   "op": "deliver",
+   "id": 1,
+   "msg": "RequestVote 0->1"
+  },
+  {
+   "op": "deliver",
+   "id": 2,
+   "msg": "RequestVote 0->2"
+  },
+  {
+   "op": "deliver",
+   "id": 3,
+   "msg": "RequestVote 0->3"
+  },
+  {
+   "op": "deliver",
+   "id": 4,
+   "msg": "RequestVote 0->4"
+  },
+  {
+   "op": "deliver",
+   "id": 5,
+   "msg": "RequestVoteReply 1->0"
+  },
+  {
+   "op": "deliver",
+   "id": 6,
+   "msg": "RequestVoteReply 2->0"
+  },
+  {
+   "op": "deliver",
+   "id": 7,
+   "msg": "RequestVoteReply 3->0"
+  },
+  {
+   "op": "deliver",
+   "id": 8,
+   "msg": "RequestVoteReply 4->0"
+  },
+  {
+   "op": "deliver",
+   "id": 9,
+   "msg": "AppendEntries 0->1"
+  },
+  {
+   "op": "deliver",
+   "id": 10,
+   "msg": "AppendEntries 0->2"
+  },
+  {
+   "op": "deliver",
+   "id": 11,
+   "msg": "AppendEntries 0->3"
+  },
+  {
+   "op": "deliver",
+   "id": 12,
+   "msg": "AppendEntries 0->4"
+  },
+  {
+   "op": "deliver",
+   "id": 13,
+   "msg": "AppendEntriesReply 1->0"
+  },
+  {
+   "op": "deliver",
+   "id": 14,
+   "msg": "AppendEntriesReply 2->0"
+  },
+  {
+   "op": "deliver",
+   "id": 15,
+   "msg": "AppendEntriesReply 3->0"
+  },
+  {
+   "op": "deliver",
+   "id": 16,
+   "msg": "AppendEntriesReply 4->0"
+  }
+ ],
+ "expect": {
+  "no_violation": true,
+  "leaders": [
+   0
+  ],
+  "final_levels": [
+   2,
+   2,
+   2,
+   2,
+   2
+  ],
+  "final": [
+   {
+    "id": 0,
+    "term": 1,
+    "role": "Leader",
+    "level": 2,
+    "commit": 0,
+    "voted_for": 0,
+    "log": []
+   },
+   {
+    "id": 1,
+    "term": 1,
+    "role": "Follower",
+    "level": 2,
+    "commit": 0,
+    "voted_for": 0,
+    "log": []
+   },
+   {
+    "id": 2,
+    "term": 1,
+    "role": "Follower",
+    "level": 2,
+    "commit": 0,
+    "voted_for": 0,
+    "log": []
+   },
+   {
+    "id": 3,
+    "term": 1,
+    "role": "Follower",
+    "level": 2,
+    "commit": 0,
+    "voted_for": 0,
+    "log": []
+   },
+   {
+    "id": 4,
+    "term": 1,
+    "role": "Follower",
+    "level": 2,
+    "commit": 0,
+    "voted_for": 0,
+    "log": []
+   }
+  ]
+ }
+}
