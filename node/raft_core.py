@@ -4,6 +4,7 @@ What this file does:  leader election by node-count majority, log replication, c
 (only entries of the current term), persistence helpers, restart.
 What YOU add (search for "TODO(IE)"):  levels, level views, weighted quorums, Epoch settlement, demotion,
 promotion, the missed-era rule, commit variants A and B, and the messages' `level` / `level_table` fields.
+Part 3 additions are marked "TODO(IE) [Part 3]": Pre-Vote (new handlers and a change to the election timeout).
 
 Rules you must keep (handout section 4.4):  every handler returns at most one message per destination,
 sorted by target node id, smallest first.  Messages are plain dicts.
@@ -37,6 +38,7 @@ class IERaftNode:
         self.last_leader_term = 0
         self.commit_mode = commit_mode
         self.prevote = prevote              # Part 3 only
+        # TODO(IE) [Part 3]: Pre-Vote needs more state here (for example the pre-vote term and the pre-votes collected).
 
     # ------------------------------------------------------------ helpers
     def _last(self):
@@ -65,6 +67,7 @@ class IERaftNode:
         if self.role == "Leader":
             return []
         # TODO(IE): count the timeout, demote if needed (section 3.5).
+        # TODO(IE) [Part 3]: if self.prevote, send PreVote messages instead of starting the election at once.
         self.role = "Candidate"
         self.current_term += 1
         self.voted_for = self.node_id
@@ -107,6 +110,9 @@ class IERaftNode:
             if len(self.votes_granted) >= self._majority():
                 return self._become_leader()
         return []
+
+    # TODO(IE) [Part 3]: add handle_prevote(args) and handle_prevote_response(resp) (PreVote / PreVoteReply).
+    #   Your server.py must route these two message types to them.
 
     def _become_leader(self):
         self.role = "Leader"

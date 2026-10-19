@@ -21,6 +21,10 @@ from raft_core import IERaftNode   # noqa: F401  (your IE rules go into raft_cor
 
 
 def main():
+    # TODO(IE): scripted mode: /init, /event, /state, /health (handout section 5.1).
+    # TODO(IE): persistence: /data/config.json and /data/state.json, written before every answer (section 5.2).
+    # TODO(IE) [Part 3]: live mode (MODE=live): timers, POST /message, POST /client, JSON log lines (section 5.3).
+    # TODO(IE) [Part 3]: route PreVote / PreVoteReply messages to your node's Pre-Vote handlers.
     raise NotImplementedError("write the HTTP service (handout section 5.1)")
 
 

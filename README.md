@@ -15,6 +15,20 @@ Course starter for the IE-Raft project (see the handout for the rules, problems 
 | `check_logs.py` | Checks live-mode logs (Part 3). |
 | `Makefile` | `make test`, `make selfcheck`, `make up`, `make down`. |
 
+## What you have to write
+
+Search for `TODO(IE)` in `node/` to find every place; `TODO(IE) [Part 3]` marks the Part 3 additions.
+
+| Where | What | When |
+|---|---|---|
+| `node/raft_core.py` | the IE rules: levels, level views, weighted quorums, Epoch settlement, demotion, promotion, missed-era rule, commit variants A and B, `level` / `level_table` in messages, restart rules | Part 1 |
+| `node/server.py` | the whole HTTP service: scripted mode and persistence | Part 1 |
+| `node/server.py` | live mode: timers, `POST /message`, `POST /client`, JSON log lines | Part 3 |
+| `node/raft_core.py`, `node/server.py` | Pre-Vote: new `PreVote` / `PreVoteReply` handlers, a change to the election timeout, routing of the two message types | Part 3 |
+| `node/Dockerfile` | install `iproute2` if you use `tc netem` | Part 3 |
+
+Everything else in `raft_core.py` is plain Raft and you should not need to change it. Do not edit `harness/` (the grader uses its own copy), keep the keys of `get_state()`, and keep the message rules below.
+
 ## Quick start
 
 ```
@@ -48,5 +62,5 @@ docker compose run --rm -T harness python live_client.py --interval 200 --durati
 docker compose logs --no-color --no-log-prefix > all.log && python check_logs.py all.log
 ```
 Timers are set with `HEARTBEAT_MS`, `ELECTION_MIN_MS`, `ELECTION_MAX_MS` (defaults 50, 300, 600). Set `PREVOTE=1` for Pre-Vote.
-`live_client.py` sends commands to `POST /client` on your nodes; it expects the answer `{"accepted", "leader"}` (see handout section 5.3).
+Your node must answer `POST /client` (body `{"command": ...}`) with `{"accepted": true|false, "leader": id|null}`: `accepted` is true when the node is the Leader and appended the command; otherwise it is false and `leader` is the id of the Leader the node currently knows, or `null`. `live_client.py` relies on this.
 Fault injection: see handout section 5.4 (`docker kill`, `docker network disconnect`, `docker pause`, `tc netem`).
